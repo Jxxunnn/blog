@@ -6,25 +6,28 @@ import "./App.css";
 
 function App() {
   let [글제목, 글제목변경] = useState([
-    "남자 코트 추천",
-    "산본 혼밥 추천",
     "안양 맛집 추천",
-  ]); // [state 데이터. state 데이터 변경 함수]
+    "산본 혼밥 추천",
+    "여자 코트 추천",
+  ]);
+  let [발행, 발행변경] = useState([
+    "2월 17일 발행",
+    "2월 18일 발행",
+    "2월 19일 발행",
+  ]);
+  let [좋아요, 좋아요변경] = useState([0, 0, 0]);
+  let [모달, 모달변경] = useState(false);
+  let [몇번째, 몇번째변경] = useState(0);
+  let [입력값, 입력값변경] = useState("");
 
-  let [따봉, 따봉변경] = useState([0, 0, 0]);
-  let [modal, modal변경] = useState(false);
-  let [누른제목, 누른제목변경] = useState(0);
+  function 좋아요함수(i) {
+    let newArray = [...좋아요];
+    newArray[i]++;
+    좋아요변경(newArray);
+  }
 
-  const 따봉함수 = (i) => {
-    let 따봉copy = [...따봉];
-    따봉copy[i]++;
-    따봉변경(따봉copy);
-  };
-
-  function 제목바꾸기() {
-    const newArray = [...글제목];
-    newArray[0] = "여자 코트 추천";
-    newArray.sort();
+  function 정렬함수() {
+    let newArray = [...글제목].sort();
     글제목변경(newArray);
   }
 
@@ -33,44 +36,43 @@ function App() {
       <div className="black-nav">
         <div>개발 Blog</div>
       </div>
-
       {글제목.map(function (글, i) {
         return (
           <div className="list">
             <h3
-              onClick={() => {
-                누른제목변경(i);
+              onClick={function () {
+                모달변경(!모달);
+                몇번째변경(i);
               }}
             >
               {글}
               <span
                 onClick={() => {
-                  따봉함수(i);
+                  {
+                    좋아요함수(i);
+                  }
                 }}
               >
                 😀
               </span>
-              {따봉[i]}
+              {좋아요[i]}
             </h3>
-
-            <p>2월 19일 발행</p>
+            <span>{발행[i]}</span>
             <hr />
           </div>
         );
       })}
-      {modal === true ? (
-        <Modal 글제목={글제목} 누른제목={누른제목}></Modal>
-      ) : null}
-
-      <button
-        onClick={() => {
-          modal변경(!modal);
+      <input
+        onChange={(e) => {
+          {
+            입력값변경(e.target.value);
+            console.log({ 입력값 });
+          }
         }}
-      >
-        모달버튼
-      </button>
+      ></input>
+      <button onClick={정렬함수}>정렬</button>
 
-      <button onClick={제목바꾸기}>버튼</button>
+      {모달 === true ? <Modal 글제목={글제목} 몇번째={몇번째}></Modal> : null}
     </div>
   );
 }
@@ -78,9 +80,10 @@ function App() {
 function Modal(props) {
   return (
     <div className="modal">
-      <h2>{props.글제목[props.누른제목]}</h2>
+      <h3>{props.글제목[props.몇번째]}</h3>
       <p>날짜</p>
       <p>상세내용</p>
+      <button onClick={function () {}}>닫기</button>
     </div>
   );
 }
