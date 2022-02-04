@@ -20,6 +20,13 @@ function App() {
   let [몇번째, 몇번째변경] = useState(0);
   let [입력값, 입력값변경] = useState("");
 
+  function 저장함수() {
+    let newArray = [...글제목];
+    newArray.unshift(입력값);
+    글제목변경(newArray);
+    입력값변경("");
+  }
+
   function 좋아요함수(i) {
     let newArray = [...좋아요];
     newArray[i]++;
@@ -38,7 +45,7 @@ function App() {
       </div>
       {글제목.map(function (글, i) {
         return (
-          <div className="list">
+          <div className="list" key={i}>
             <h3
               onClick={function () {
                 모달변경(!모달);
@@ -62,14 +69,17 @@ function App() {
           </div>
         );
       })}
-      <input
-        onChange={(e) => {
-          {
-            입력값변경(e.target.value);
-            console.log({ 입력값 });
-          }
-        }}
-      ></input>
+      <div className="publish">
+        <input
+          onChange={(e) => {
+            {
+              입력값변경(e.target.value);
+            }
+          }}
+        ></input>
+        <button onClick={저장함수}>저장</button>
+      </div>
+
       <button onClick={정렬함수}>정렬</button>
 
       {모달 === true ? <Modal 글제목={글제목} 몇번째={몇번째}></Modal> : null}
@@ -83,7 +93,6 @@ function Modal(props) {
       <h3>{props.글제목[props.몇번째]}</h3>
       <p>날짜</p>
       <p>상세내용</p>
-      <button onClick={function () {}}>닫기</button>
     </div>
   );
 }
